@@ -1,0 +1,30 @@
+{{ 'product-tabs.css' | asset_url | stylesheet_tag }}
+
+{% assign product = all_products[block.settings.product] %}
+
+<div class="extension">
+    <div>{{product.title}}</div>
+    <div>{{product.description}}</div>
+    <div>{{product.tags}}</div>
+    {% if product.variants.size > 0 %}
+        {% for variant in product.variants %}
+            <div>{{variant.title}} - ${{variant.price}}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Product Tabs",
+  "templates": ["product"],
+  "target": "section",
+  "settings": [
+    {
+      "id": "product",
+      "type": "product",
+      "label": "Product",
+      "autofill": true
+    }
+  ]
+}
+{% endschema %}
