@@ -1,3 +1,11 @@
-.extension {
-  background-color: antiquewhite;
+.tab-pane {
+  padding: 10px 10px 10px 0;
+}
+
+.tab-pane h3:nth-child(3) {
+  margin-top: 10px;
+}
+
+.nav-item button, .tab-pane p, .tab-pane td, .tab-pane span {
+  font-size: 13px;;
 }
