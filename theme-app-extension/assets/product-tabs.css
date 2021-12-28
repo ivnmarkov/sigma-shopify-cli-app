@@ -9,3 +9,12 @@
 .nav-item button, .tab-pane p, .tab-pane td, .tab-pane span {
   font-size: 13px;;
 }
+
+.tab-content {
+  width: 100%;
+}
+
+.nav.flex-column {
+  margin-right: 10px;
+  min-width: 130px;
+}
