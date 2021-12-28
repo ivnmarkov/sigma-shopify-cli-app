@@ -89,7 +89,11 @@ And then click "Save".
 
 ## Useful links
 [What is Theme App Extensions](https://www.youtube.com/watch?v=xYz_XMY7jEU&t=296s)
+
 [GraphQL Basics for Shopify](https://www.youtube.com/watch?v=ARgQ4oK0Mz8)
+
 [Advanced Example of Shopify App + Theme extension](https://github.com/Shopify/product-reviews-sample-app)
+
 [Shopify Liquid - Crash Course](https://www.youtube.com/watch?v=zBtwd2OfZsI)
+
 [Shopify GrapiQL App](https://shopify.dev/apps/tools/graphiql-admin-api) - this will help to test graphql queries right in your store.
