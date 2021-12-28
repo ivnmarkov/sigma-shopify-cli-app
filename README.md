@@ -72,4 +72,24 @@ And then click "Save".
 - Make sure you are logged in by running `shopify login --shop=your-test-shop-name.myshopify.com`
 - Register the extension by running `shopify extension register`.
 - Push the extension by running ` shopify extension push`
-- You should now see the extension in your app page in your Partner Dashboard under _Extensions_ > _Online Store_.
+- You should now see the extension in your app page in your Partner Dashboard under _Your App_ > _Manage extensions_.
+- Don't forget to enable extension for the development store preview.
+
+## Shopify application struture
+
+* `pages` - contain pages of your application that will appear when you open application in Admin part
+* `components` - folder with React components that furthe will be placed on pages. Also components contain graphQL queries and mutations, that can be placed in separate folders `graphql > mutaions + queries`.
+* `server` - folder contains next.js server logic and also controls routing. Generates by cli after application setup. Can be extended.
+
+## Shopify Theme extension structure
+
+* `assets` - this folder able to conatin js and css files that further will be used in block components.
+* `blocks` - theme-extension components. Each file is a separate block that can be placed on the page, depending on its settings and  page type.
+* `snippets` - folder with reusable components, that can be used in blocks multiple times.
+
+## Useful links
+[What is Theme App Extensions](https://www.youtube.com/watch?v=xYz_XMY7jEU&t=296s)
+[GraphQL Basics for Shopify](https://www.youtube.com/watch?v=ARgQ4oK0Mz8)
+[Advanced Example of Shopify App + Theme extension](https://github.com/Shopify/product-reviews-sample-app)
+[Shopify Liquid - Crash Course](https://www.youtube.com/watch?v=zBtwd2OfZsI)
+[Shopify GrapiQL App](https://shopify.dev/apps/tools/graphiql-admin-api) - this will help to test graphql queries right in your store.
