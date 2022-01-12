@@ -6,6 +6,7 @@ import Shopify, { ApiVersion } from "@shopify/shopify-api";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
+import { getSubscriptionUrl } from "./handlers/mutations/get-subscription-url";
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
@@ -57,8 +58,11 @@ app.prepare().then(async () => {
           );
         }
 
+        // Reditect to subscription page before logging into the app
+        await getSubscriptionUrl(ctx, accessToken, shop);
+
         // Redirect to app with shop parameter upon auth
-        ctx.redirect(`/?shop=${shop}&host=${host}`);
+        //ctx.redirect(`/?shop=${shop}&host=${host}`);
       },
     })
   );

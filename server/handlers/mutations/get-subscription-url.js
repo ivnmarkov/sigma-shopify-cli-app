@@ -1,12 +1,9 @@
-import "isomorphic-fetch";
-import { gql } from "apollo-boost";
-
-export function RECURRING_CREATE(url) {
-  return gql`
-    mutation {
+export const getSubscriptionUrl = async (ctx, accessToken, shop) => {
+  const query = JSON.stringify({
+    query: `mutation {
       appSubscriptionCreate(
           name: "Super Duper Plan"
-          returnUrl: "${url}"
+          returnUrl: "https://${shop}/admin/apps/cli-react-app"
           test: true
           lineItems: [
           {
@@ -35,16 +32,23 @@ export function RECURRING_CREATE(url) {
               id
             }
         }
-    }`;
-}
+    }`,
+  });
 
-export const getSubscriptionUrl = async ctx => {
-  const { client } = ctx;
-  const confirmationUrl = await client
-    .mutate({
-      mutation: RECURRING_CREATE(process.env.HOST)
-    })
-    .then(response => response.data.appSubscriptionCreate.confirmationUrl);
+  const response = await fetch(
+    `https://${shop}/admin/api/2019-10/graphql.json`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": accessToken,
+      },
+      body: query,
+    }
+  );
 
+  const responseJson = await response.json();
+  const confirmationUrl =
+    responseJson.data.appSubscriptionCreate.confirmationUrl;
   return ctx.redirect(confirmationUrl);
 };
