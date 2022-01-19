@@ -1,26 +1,28 @@
 export const getSubscriptionUrl = async (ctx, accessToken, shop) => {
+  const appName = "cli-react-app";
   const query = JSON.stringify({
     query: `mutation {
       appSubscriptionCreate(
           name: "Super Duper Plan"
-          returnUrl: "https://${shop}/admin/apps/cli-react-app"
+          returnUrl: "https://${shop}/admin/apps/${appName}"
+          trialDays: 7
           test: true
           lineItems: [
-          {
-            plan: {
-              appUsagePricingDetails: {
-                  cappedAmount: { amount: 10, currencyCode: USD }
-                  terms: "$1 for 1000 emails"
+            {
+              plan: {
+                appUsagePricingDetails: {
+                  terms: "$1 for 100 emails"
+                  cappedAmount: { amount: 20.00, currencyCode: USD }
+                }
+              }
+            },
+            {
+              plan: {
+                appRecurringPricingDetails: {
+                  price: { amount: 10.00, currencyCode: USD }
+                }
               }
             }
-          }
-          {
-            plan: {
-              appRecurringPricingDetails: {
-                  price: { amount: 10, currencyCode: USD }
-              }
-            }
-          }
           ]
         ) {
             userErrors {
@@ -30,6 +32,14 @@ export const getSubscriptionUrl = async (ctx, accessToken, shop) => {
             confirmationUrl
             appSubscription {
               id
+              lineItems {
+                id
+                plan {
+                  pricingDetails {
+                    __typename
+                  }
+                }
+              }
             }
         }
     }`,

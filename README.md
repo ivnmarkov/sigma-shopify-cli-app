@@ -77,17 +77,86 @@ And then click "Save".
 
 ## Shopify application struture
 
-* `pages` - contain pages of your application that will appear when you open application in Admin part
-* `components` - folder with React components that furthe will be placed on pages. Also components contain graphQL queries and mutations, that can be placed in separate folders `graphql > mutaions + queries`.
-* `server` - folder contains next.js server logic and also controls routing. Generates by cli after application setup. Can be extended.
+- `pages` - contain pages of your application that will appear when you open application in Admin part
+- `components` - folder with React components that furthe will be placed on pages. Also components contain graphQL queries and mutations, that can be placed in separate folders `graphql > mutaions + queries`.
+- `server` - folder contains next.js server logic and also controls routing. Generates by cli after application setup. Can be extended.
 
 ## Shopify Theme extension structure
 
-* `assets` - this folder able to conatin js and css files that further will be used in block components.
-* `blocks` - theme-extension components. Each file is a separate block that can be placed on the page, depending on its settings and  page type.
-* `snippets` - folder with reusable components, that can be used in blocks multiple times.
+- `assets` - this folder able to conatin js and css files that further will be used in block components.
+- `blocks` - theme-extension components. Each file is a separate block that can be placed on the page, depending on its settings and page type.
+- `snippets` - folder with reusable components, that can be used in blocks multiple times.
+
+## Shopify Billing settings
+
+To start working with billing, make sure you have file named `get-subscription-url.js` in `./server/handlers/mutations` folder. Also make sure that this file imported into `server.js` file and triggered in `createShopifyAuth` function. Don't forget to pass to arguments `ctx, accessToken, shop` variables, that you have received in before in `createShopifyAuth` function. Now billing is connected and will appear after you install unlisted app in you store.
+
+Now let's understand the sctructure of `getSubscriptionUrl`:
+
+But before we start, don't forget to specify an `appName`. The correct `appName` you can find in the list of application in Partners
+
+1. First of all we need to configure the subscription mutation. Each subscriot that will be created contains the next fields:
+
+- `name` - with the name of subscription;
+- `returnUrl` - URL where user will be redirected after successful billing;
+- `trialDays` - number of trial days;
+- `lineItems` - contains an array which describes plans user will pay for;
+
+In Shopify the next types of pricing exist:
+
+```
+{
+  plan: {
+    appUsagePricingDetails: { // Allows an app to issue arbitrary charges
+                              //for app usage associated with a subscription.
+      terms: "$1 for 100 emails" // Terms for wich user pays
+      cappedAmount: { amount: 20.00, currencyCode: USD } // The maximum amount of usage charges
+                                                         //that can be incurred within a subscription billing interval.
+    }
+  }
+}
+```
+
+```
+{
+  plan: {
+    appRecurringPricingDetails: { // Instructs the app subscription to generate a fixed charge on a recurring basis.
+                                  // The frequency is specified by the billing interval.
+      price: { amount: 10.00, currencyCode: USD } // The amount to be charged to the store every billing interval.
+                                                  // The only permitted currency code is USD.
+      interval: EVERY_30_DAYS // How often the app subscription generates a charge.
+      // Also interval can be ANNUAL. But ANNUAL interval doesn't work with appUsagePricingDetails
+    }
+  }
+}
+```
+
+Also there is a feature of one `one-time charges`, whith wich user can buy app once and doesn't pay for it each month:
+
+```
+	appPurchaseOneTimeCreate(
+    name: "Email template"
+    price: { amount: 100.00, currencyCode: USD }
+    returnUrl: "<Use same return URL as for appSubscriptionCreate>"
+  ) {
+    userErrors {
+      field
+      message
+    }
+    confirmationUrl
+    appPurchaseOneTime {
+      id
+    }
+  }
+}
+```
+
+2. The `response` variable gets response from graphQl api where we have sent query prepared before;
+
+3. Than we parse received json from response and redirect user to the application page with the `confirmationUrl`;
 
 ## Useful links
+
 [What is Theme App Extensions](https://www.youtube.com/watch?v=xYz_XMY7jEU&t=296s)
 
 [GraphQL Basics for Shopify](https://www.youtube.com/watch?v=ARgQ4oK0Mz8)

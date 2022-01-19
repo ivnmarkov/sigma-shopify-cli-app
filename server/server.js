@@ -59,7 +59,13 @@ app.prepare().then(async () => {
         }
 
         // Reditect to subscription page before logging into the app
-        await getSubscriptionUrl(ctx, accessToken, shop);
+        await getSubscriptionUrl(
+          ctx,
+          accessToken,
+          shop,
+          host,
+          process.env.HOST
+        );
 
         // Redirect to app with shop parameter upon auth
         //ctx.redirect(`/?shop=${shop}&host=${host}`);
